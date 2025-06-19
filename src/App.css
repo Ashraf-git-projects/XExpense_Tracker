@@ -1,38 +1,304 @@
-.App {
-  text-align: center;
+/* Global Reset */
+body {
+  font-family: 'Inter', 'Roboto', sans-serif;
+  margin: 0;
+  background-color: #1F1F1F;
+  color: #fff;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+/* App container */
+.app-container {
+  background-color: #1F1F1F;
+  color: #fff;
+  padding: 8px;
+  gap: 12px;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+
+/* Layout Containers */
+.balance-comp {
+  background-color: rgb(111, 111, 111);
+  display: flex;
+  align-items: center;
+  padding: 20px;
+  gap: 60px;
+  border-radius: 8px;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.second-comp {
+  display: flex;
+  align-items: flex-start;
+  padding: 20px;
+  justify-content: space-between;
+}
+
+/* List + Summary Panels */
+.list-comp {
+  flex: 3;
+  background-color: rgb(66, 66, 66);
+  padding: 20px;
+  border-radius: 10px;
+  margin-right: 20px;
+}
+.expense-list-wrapper {
+  max-height: 320px;
+  overflow-y: auto;
+}
+
+
+.top-expense {
+  flex: 1;
+  background-color: rgb(66, 66, 66);
+  padding: 20px;
+  border-radius: 10px;
+}
+
+/* Wallet & Expense Card Container */
+.w-balance,
+.ex-form {
+  padding: 16px 20px;
+  background-color: #2C2C2C;
+  border-radius: 16px;
+  width: 280px;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Header Text */
+.w-balance h2,
+.ex-form h2 {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0;
+}
+
+/* Buttons (Shared) */
+.income-btn,
+.expense-btn {
+  border: none;
+  border-radius: 20px;
+  padding: 8px 18px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  color: white;
+  transition: all 0.3s ease-in-out;
+}
+
+/* Income = Green */
+.income-btn {
+  background-color: #00C853;
+}
+.income-btn:hover {
+  background-color: #00B74A;
+}
+
+/* Expense = Red */
+.expense-btn {
+  background-color: #D32F2F;
+}
+.expense-btn:hover {
+  background-color: #C62828;
+}
+
+/* Dialog Buttons */
+.dialog-buttons {
+  padding: 16px;
+  justify-content: space-between;
+}
+
+.add-btn {
+  background-color: #D32F2F !important;
+  color: white !important;
+  border-radius: 20px;
+  padding: 6px 16px;
+  text-transform: none;
+}
+
+.cancel-btn {
+  background-color: #9E9E9E !important;
+  color: white !important;
+  border-radius: 20px;
+  padding: 6px 16px;
+  text-transform: none;
+}
+
+.add-btn:hover {
+  background-color: #C62828 !important;
+}
+
+.cancel-btn:hover {
+  background-color: #757575 !important;
+}
+
+/* Input Styling */
+.MuiInputBase-root {
+  background-color: #F9F9F9;
+  border-radius: 10px;
+}
+.top-expense {
+  flex: 1;
+  background-color: rgb(66, 66, 66);
+  padding: 20px;
+  border-radius: 10px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+}
+/* Expense List Styling Fixes */
+.expense-item {
+  padding: 2px 0;
+  border-bottom: 1px solid #444;
 }
 
-.App-link {
-  color: #61dafb;
+.expense-title-amount {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
+.expense-title {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #fff;
+}
+
+.expense-amount {
+  font-size: 0.85rem;
+  font-weight: bold;
+  color: #90caf9;
+}
+
+.expense-meta {
+  font-size: 0.7rem;
+  color: #bdbdbd;
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1px;
+}
+
+.MuiListItem-root {
+  padding-top: 2px !important;
+  padding-bottom: 2px !important;
+  min-height: unset !important;
+}
+
+.MuiAvatar-root {
+  width: 28px !important;
+  height: 28px !important;
+}
+
+.MuiSvgIcon-root {
+  font-size: 1rem !important;
+}
+
+.MuiPagination-root {
+  margin-top: 4px !important;
+  font-size: 0.8rem;
+}
+
+.MuiPagination-ul > li {
+  margin: 0 2px;
+}
+@media (max-width: 1024px) {
+  .balance-comp {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 24px;
+    padding: 16px;
   }
-  to {
-    transform: rotate(360deg);
+
+  .w-balance,
+  .ex-form {
+    width: 100%;
+    max-width: 340px;
+  }
+
+  .second-comp {
+    flex-direction: column;
+    padding: 16px;
+  }
+
+  .list-comp {
+    margin-right: 0;
+    margin-bottom: 20px;
+  }
+
+  .top-expense {
+    width: 100%;
+    padding: 16px;
+  }
+
+  .expense-title-amount,
+  .expense-meta {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+  }
+}
+
+@media (max-width: 600px) {
+  .app-container {
+    padding: 12px;
+  }
+
+  h1 {
+    font-size: 1.75rem;
+    text-align: center;
+  }
+
+  .balance-comp {
+    padding: 12px;
+    gap: 16px;
+  }
+
+  .second-comp {
+    padding: 0 12px;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .list-comp{
+    margin-top: 15px;
+    padding: 12px;
+     width: 100%;
+    box-sizing: border-box;
+  }
+  .top-expense {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 12px;
+    border-radius: 8px;
+  }
+
+  .expense-title {
+    font-size: 0.8rem;
+  }
+
+  .expense-amount {
+    font-size: 0.8rem;
+  }
+
+  .expense-meta {
+    font-size: 0.65rem;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .MuiPagination-root {
+    font-size: 0.7rem;
+  }
+
+  .MuiSvgIcon-root {
+    font-size: 0.9rem !important;
+  }
+
+  .MuiAvatar-root {
+    width: 24px !important;
+    height: 24px !important;
   }
 }

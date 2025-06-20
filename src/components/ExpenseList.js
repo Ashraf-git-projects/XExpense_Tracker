@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   List,
   ListItem,
@@ -6,18 +6,23 @@ import {
   ListItemText,
   Avatar,
   IconButton,
-  Typography,
   Pagination,
-  Stack,
-} from '@mui/material';
+} from "@mui/material";
 
-import DeleteIcon from '@mui/icons-material/Delete';
-import FastfoodIcon from '@mui/icons-material/Fastfood';
-import ShoppingBagIcon from '@mui/icons-material/ShoppingBag';
-import DirectionsCarIcon from '@mui/icons-material/DirectionsCar';
-import CategoryIcon from '@mui/icons-material/Category';
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
+import FastfoodIcon from "@mui/icons-material/Fastfood";
+import ShoppingBagIcon from "@mui/icons-material/ShoppingBag";
+import DirectionsCarIcon from "@mui/icons-material/DirectionsCar";
+import LocalMoviesIcon from "@mui/icons-material/LocalMovies";
+import FlightTakeoffIcon from "@mui/icons-material/FlightTakeoff";
+import CategoryIcon from "@mui/icons-material/Category";
 
-export default function ExpenseList({ expenses = [], setExpenses = () => {} }) {
+export default function ExpenseList({
+  expenses = [],
+  setExpenses = () => {},
+  onEditExpense = () => {},
+}) {
   const [page, setPage] = useState(1);
   const itemsPerPage = 3;
 
@@ -28,65 +33,61 @@ export default function ExpenseList({ expenses = [], setExpenses = () => {} }) {
 
   const startIdx = (page - 1) * itemsPerPage;
   const endIdx = startIdx + itemsPerPage;
-  const currentExpenses = expenses
-    .slice()
-    .reverse()
-    .slice(startIdx, endIdx);
+  const currentExpenses = expenses.slice().reverse().slice(startIdx, endIdx);
 
-  // Helper to get icon per category
   const getCategoryIcon = (category) => {
     switch (category.toLowerCase()) {
-      case 'food':
+      case "food":
         return <FastfoodIcon />;
-      case 'shopping':
+      case "shopping":
         return <ShoppingBagIcon />;
-      case 'transport':
-        return <DirectionsCarIcon />;
+      case "travel":
+        return <FlightTakeoffIcon />;
+      case "entertainment":
+        return <LocalMoviesIcon />;
       default:
-        return <CategoryIcon />;
+        return <DirectionsCarIcon />;
     }
   };
+
+  function handleDelete(id) {
+    setExpenses((prev) => prev.filter((exp) => exp.id !== id));
+  }
 
   return (
     <div>
       <List dense>
-  {currentExpenses.map((exp) => {
-    const formattedDate = new Date(exp.date).toLocaleDateString('en-GB');
+        {currentExpenses.map((exp) => {
+          const formattedDate = new Date(exp.date).toLocaleDateString("en-GB");
 
-    return (
-      <div key={exp.id} className="expense-item">
-        <ListItem
-          secondaryAction={
-            <IconButton edge="end" onClick={() => handleDelete(exp.id)}>
-              <DeleteIcon />
-            </IconButton>
-          }
-        >
-          <ListItemAvatar>
-            <Avatar sx={{ bgcolor: '#555' }}>{getCategoryIcon(exp.category)}</Avatar>
-          </ListItemAvatar>
+          return (
+            <div key={exp.id} className="expense-item">
+           <ListItem>
+  <ListItemAvatar>
+    <Avatar sx={{ bgcolor: "#ccc" }}>
+      {getCategoryIcon(exp.category)}
+    </Avatar>
+  </ListItemAvatar>
 
-          <ListItemText
-  primary={
-    <div className="expense-title-amount">
-      <span className="expense-title">{exp.title}</span>
-      <span className="expense-amount">₹{exp.amount}</span>
-    </div>
-  }
-  secondary={
-    <div className="expense-meta">
-      <span>{exp.category}</span>
-      <span>{formattedDate}</span>
-    </div>
-  }
-/>
+  <div className="expense-details">
+    <span className="expense-title">{exp.title}</span>
+    <span className="expense-date">{formattedDate}</span>
+  </div>
 
-        </ListItem>
-      </div>
-    );
-  })}
-</List>
-
+  <div className="expense-amount-actions">
+    <span className="expense-amount">₹{exp.amount}</span>
+    <IconButton onClick={() => handleDelete(exp.id)} className="icon-button delete">
+      <DeleteIcon />
+    </IconButton>
+    <IconButton onClick={() => onEditExpense(exp)} className="icon-button edit">
+      <EditIcon />
+    </IconButton>
+  </div>
+</ListItem>
+            </div>
+          );
+        })}
+      </List>
 
       {totalPages > 1 && (
         <Pagination
@@ -94,13 +95,9 @@ export default function ExpenseList({ expenses = [], setExpenses = () => {} }) {
           page={page}
           onChange={handlePageChange}
           color="primary"
-          sx={{ mt: 2, display: 'flex', justifyContent: 'center' }}
+          sx={{ mt: 2, display: "flex", justifyContent: "center" }}
         />
       )}
     </div>
   );
-
-  function handleDelete(id) {
-    setExpenses((prev) => prev.filter((exp) => exp.id !== id));
-  }
 }

@@ -13,6 +13,9 @@ function App() {
   const [expenses, setExpenses] = useState(() => {
     return JSON.parse(localStorage.getItem("expenses")) || [];
   });
+  const [editingExpense, setEditingExpense] = useState(null);
+const totalExpenses = expenses.reduce((acc, curr) => acc + Number(curr.amount), 0);
+
 
   useEffect(() => {
     localStorage.setItem("walletBalance", balance);
@@ -29,9 +32,12 @@ function App() {
       <div className="balance-comp">
         <WalletBalance balance={balance} setBalance={setBalance} />
         <ExpenseForm
-          expenses={expenses}
-          setExpenses={setExpenses}
-          setBalance={setBalance}
+         expenses={expenses}
+  setExpenses={setExpenses}
+  setBalance={setBalance}
+  editingExpense={editingExpense}
+  onFinishEdit={() => setEditingExpense(null)}
+  totalExpenses={totalExpenses}
         />
         <ExpenseSummary expenses={expenses} />
       </div>
@@ -39,7 +45,7 @@ function App() {
       <div className="second-comp">
         <div className="list-comp">
           <h2>Recent Transactions</h2>
-          <ExpenseList expenses={expenses} setExpenses={setExpenses} />
+          <ExpenseList expenses={expenses} setExpenses={setExpenses} onEditExpense={(exp) => setEditingExpense(exp)} />
         </div>
         <div className="top-expense">
           <h2>Top Expenses</h2>

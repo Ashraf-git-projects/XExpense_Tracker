@@ -1,11 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Dialog, DialogTitle, DialogContent, DialogActions,
   Button, TextField, MenuItem, Grid
 } from '@mui/material';
-import './ExpenseForm.css'; // We'll add custom styles here
+import './ExpenseForm.css';
 
-export default function ExpenseForm({ expenses = [], setExpenses = () => {}, setBalance = () => {} }) {
+export default function ExpenseForm({
+  expenses = [],
+  setExpenses = () => {},
+  setBalance = () => {},
+  editingExpense = null,
+  onFinishEdit = () => {},
+  totalExpenses = 0,
+}) {
   const [open, setOpen] = useState(false);
   const [title, setTitle] = useState('');
   const [amount, setAmount] = useState('');
@@ -13,40 +20,70 @@ export default function ExpenseForm({ expenses = [], setExpenses = () => {}, set
   const [date, setDate] = useState('');
   const [lastExpenseAmount, setLastExpenseAmount] = useState('');
 
+  const isEdit = !!editingExpense;
+
+  useEffect(() => {
+    if (editingExpense) {
+      setTitle(editingExpense.title);
+      setAmount(editingExpense.amount.toString());
+      setCategory(editingExpense.category);
+      setDate(editingExpense.date);
+      setOpen(true);
+    }
+  }, [editingExpense]);
+
   const handleOpen = () => setOpen(true);
+
   const handleClose = () => {
     setOpen(false);
     setTitle('');
     setAmount('');
     setCategory('');
     setDate('');
+    if (isEdit) onFinishEdit();
   };
 
-  const handleAddExpense = () => {
+  const handleSubmit = () => {
     const amt = parseFloat(amount);
     if (!title || !category || isNaN(amt) || amt <= 0 || !date) return;
 
-    const newExpense = {
-      id: Date.now(),
-      title,
-      amount: amt,
-      category,
-      date
-    };
+    if (isEdit) {
+      // Editing mode
+      const updatedExpenses = expenses.map(exp =>
+        exp.id === editingExpense.id
+          ? { ...exp, title, amount: amt, category, date }
+          : exp
+      );
 
-    setExpenses(prev => [...prev, newExpense]);
-    setBalance(prev => prev - amt);
-     setLastExpenseAmount(amt);
+      const balanceDiff = amt - editingExpense.amount;
+      setExpenses(updatedExpenses);
+      setBalance(prev => prev - balanceDiff);
+    } else {
+      // Add mode
+      const newExpense = {
+        id: Date.now(),
+        title,
+        amount: amt,
+        category,
+        date,
+      };
+      setExpenses(prev => [...prev, newExpense]);
+      setBalance(prev => prev - amt);
+      setLastExpenseAmount(amt);
+    }
+
     handleClose();
   };
 
   return (
-    <div className='ex-form'>
-      <h2>Expenses : ₹{lastExpenseAmount}</h2>
-      <button className='expense-btn' type="button" onClick={handleOpen}>+ Add Expense</button>
+    <div className="ex-form">
+      <h2>Expenses : ₹ {totalExpenses}</h2>
+      <button className="expense-btn" type="button" onClick={handleOpen}>
+        + Add Expense
+      </button>
 
       <Dialog open={open} onClose={handleClose} maxWidth="xs" fullWidth>
-        <DialogTitle>Add Expenses</DialogTitle>
+        <DialogTitle>{isEdit ? 'Edit Expense' : 'Add Expenses'}</DialogTitle>
         <DialogContent>
           <Grid container spacing={2} mt={1}>
             <Grid item xs={6}>
@@ -62,7 +99,7 @@ export default function ExpenseForm({ expenses = [], setExpenses = () => {}, set
             </Grid>
             <Grid item xs={6}>
               <TextField
-               name="price"
+                name="price"
                 fullWidth
                 label="Price"
                 type="number"
@@ -74,17 +111,18 @@ export default function ExpenseForm({ expenses = [], setExpenses = () => {}, set
             </Grid>
             <Grid item xs={6}>
               <TextField
-              name="category"
+                name="category"
                 fullWidth
                 select
-  label="Category"
+                label="Category"
                 value={category}
                 onChange={(e) => setCategory(e.target.value)}
                 variant="outlined"
                 size="small"
               >
                 <MenuItem value="Food">Food</MenuItem>
-                <MenuItem value="Transport">Transport</MenuItem>
+                <MenuItem value="Travel">Travel</MenuItem>
+                <MenuItem value="Entertainment">Entertainment</MenuItem>
                 <MenuItem value="Shopping">Shopping</MenuItem>
                 <MenuItem value="Other">Other</MenuItem>
               </TextField>
@@ -108,7 +146,9 @@ export default function ExpenseForm({ expenses = [], setExpenses = () => {}, set
         </DialogContent>
 
         <DialogActions className="dialog-buttons">
-          <Button onClick={handleAddExpense} type="submit" className="add-btn">Add Expense</Button>
+          <Button onClick={handleSubmit} type="submit" className="add-btn">
+            {isEdit ? 'Update Expense' : 'Add Expense'}
+          </Button>
           <Button onClick={handleClose} className="cancel-btn">Cancel</Button>
         </DialogActions>
       </Dialog>

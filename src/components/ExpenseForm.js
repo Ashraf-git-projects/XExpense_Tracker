@@ -110,23 +110,31 @@ export default function ExpenseForm({
               />
             </Grid>
             <Grid item xs={6}>
-              <TextField
-                name="category"
-                fullWidth
-                select
-                label="Category"
-                value={category}
-                onChange={(e) => setCategory(e.target.value)}
-                variant="outlined"
-                size="small"
-              >
-                <MenuItem value="Food">Food</MenuItem>
-                <MenuItem value="Travel">Travel</MenuItem>
-                <MenuItem value="Entertainment">Entertainment</MenuItem>
-                <MenuItem value="Shopping">Shopping</MenuItem>
-                <MenuItem value="Other">Other</MenuItem>
-              </TextField>
-            </Grid>
+  {/* <label htmlFor="category" style={{ display: 'block', marginBottom: '4px', fontSize: '0.875rem' }}>
+    Category
+  </label> */}
+  <select
+    id="category"
+    name="category"
+    value={category}
+    onChange={(e) => setCategory(e.target.value)}
+    style={{
+      width: '100%',
+      padding: '10px',
+      borderRadius: '4px',
+      border: '1px solid #ccc',
+      fontSize: '0.875rem',
+    }}
+  >
+    <option value="">Select Category</option>
+    <option value="Food">Food</option>
+    <option value="Travel">Travel</option>
+    <option value="Entertainment">Entertainment</option>
+    <option value="Shopping">Shopping</option>
+    <option value="Other">Other</option>
+  </select>
+</Grid>
+
             <Grid item xs={6}>
               <TextField
                 fullWidth

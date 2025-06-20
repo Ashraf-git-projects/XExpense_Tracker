@@ -77,7 +77,7 @@ export default function ExpenseForm({ expenses = [], setExpenses = () => {}, set
               name="category"
                 fullWidth
                 select
-                label="Select Category"
+  label="Category"
                 value={category}
                 onChange={(e) => setCategory(e.target.value)}
                 variant="outlined"

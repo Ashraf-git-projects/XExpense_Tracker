@@ -1,7 +1,7 @@
 import React , {useState} from 'react'
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField } from '@mui/material';
 
-export default function({balance , setBalance}) {
+export default function WalletBalance({balance , setBalance}) {
   const[open , setOpen] = useState(false);
   const[amount , setAmount] = useState('');
   const handleOpen = ()=>{
@@ -22,7 +22,7 @@ export default function({balance , setBalance}) {
   return (
     <div className='w-balance'>
         <h2>Wallet Balance : ₹{balance}</h2>
-        <button type="button" className='income-btn'onClick={handleOpen}>+Add Income</button>
+        <button type="button" className='income-btn'onClick={handleOpen}>+ Add Income</button>
         <Dialog open={open} onClose={handleClose}>
           <DialogTitle>Add Income</DialogTitle>
           <DialogContent>
@@ -30,7 +30,7 @@ export default function({balance , setBalance}) {
   name="income"
   autoFocus
   margin="dense"
-  label="Amount"
+  label="Income Amount"
   placeholder="Income Amount"
   type="number"
   fullWidth
